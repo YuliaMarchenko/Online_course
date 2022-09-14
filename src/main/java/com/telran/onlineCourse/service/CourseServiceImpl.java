@@ -1,10 +1,12 @@
 package com.telran.onlineCourse.service;
 
 import com.telran.onlineCourse.entities.Course;
+import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.*;
 
+@Service("CourseService")
 public class CourseServiceImpl implements CourseService {
     private Map<String, Course> courses = new HashMap<>();
 

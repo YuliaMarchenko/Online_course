@@ -2,28 +2,22 @@ package com.telran.onlineCourse.controller;
 
 import com.telran.onlineCourse.entities.Course;
 import com.telran.onlineCourse.service.CourseService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @RestController
 public class CourseController {
-    private final CourseService repository;
-
-    public CourseController(CourseService repository) {
-        this.repository = repository;
-    }
+    @Autowired
+    private CourseService repository;
 
     @PostMapping("/courses")
-    Course createTask(@RequestBody Course course) {
+    Course createCourse(@RequestBody Course course) {
         Course newCourse = repository.createCourse(course);
-        if (newCourse == null){
-            throw new ResponseStatusException(HttpStatus.CONFLICT);
-        } return newCourse;
+        return courseOrError(newCourse, HttpStatus.CONFLICT);
     }
 
     @GetMapping("/courses")
@@ -35,25 +29,19 @@ public class CourseController {
     @GetMapping("/courses/{id}")
     Course findCourseById(@PathVariable("id") String id) {
         Course newCourse =  repository.findCourseById(id);
-        if (newCourse == null){
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
-        } return newCourse;
+        return courseOrError(newCourse, HttpStatus.NOT_FOUND);
     }
 
     @DeleteMapping("/courses/{id}")
     Course deleteCourse(@PathVariable("id") String id) {
         Course course = repository.deleteCourse(id);
-        if (course == null){
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
-        } return course;
+        return courseOrError(course, HttpStatus.NOT_FOUND);
     }
 
     @PutMapping("/courses/{id}/students")
     Course addStudentsToCourse(@PathVariable("id") String id, @RequestParam("names") String names) {
         Course course = repository.addStudentsToCourse(id, names.split(","));
-        if (course == null){
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
-        } return course;
+        return courseOrError(course, HttpStatus.NOT_FOUND);
     }
 
     @GetMapping("/courses/{id}/students")
@@ -67,16 +55,19 @@ public class CourseController {
     @DeleteMapping("/courses/{id}/students")
     Course deleteStudentFromCourse(@PathVariable("id") String id, @RequestParam("names") String names) {
         Course course = repository.deleteStudentFromCourse(id, names.split(","));
-        if (course == null){
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
-        } return course;
+        return courseOrError(course, HttpStatus.NOT_FOUND);
     }
 
     @PutMapping("/courses/{id}/toggle-course")
     Course changeStatusClosedOfCourse(@PathVariable("id") String id) {
         Course course = repository.changeStatusClosedOfCourse(id);
+        return courseOrError(course, HttpStatus.NOT_FOUND);
+    }
+
+    private Course courseOrError(Course course, HttpStatus notFound) {
         if (course == null){
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
-        } return course;
+            throw new ResponseStatusException(notFound);
+        }
+        return course;
     }
 }
