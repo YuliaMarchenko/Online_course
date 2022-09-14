@@ -34,12 +34,16 @@ public class CourseServiceImpl implements CourseService {
 
     @Override
     public boolean deleteCourse(String id) {
-        return false;
+        courses.remove(id);
+        return true;
     }
 
     @Override
-    public boolean addStudentsToCourse(String[] students) {
-        return false;
+    public boolean addStudentsToCourse(String id, String[] students) {
+        for(String student: students) {
+            courses.get(id).getStudents().add(student);
+        }
+        return true;
     }
 
     @Override

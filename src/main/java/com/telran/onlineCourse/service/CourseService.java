@@ -10,8 +10,8 @@ public interface CourseService {
     List<Course> showAllCourse();
     Course findCourseById(String id);
     boolean deleteCourse(String id);
-    boolean addStudentsToCourse(String [] students);
+    boolean addStudentsToCourse(String id, String [] students);
     List<String> showStudentsOfCourse();
-    boolean deleteStudentFromCourse(String name, String id);
+    boolean deleteStudentFromCourse(String id, String name);
     boolean changeStatusClosedOfCourse(String id);
 }
