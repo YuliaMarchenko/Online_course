@@ -2,7 +2,9 @@ package com.telran.onlineCourse.controller;
 
 import com.telran.onlineCourse.entities.Course;
 import com.telran.onlineCourse.service.CourseService;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.HashMap;
 import java.util.List;
@@ -17,8 +19,11 @@ public class CourseController {
     }
 
     @PostMapping("/courses")
-    Map<String, Boolean> createTask(@RequestBody Course course) {
-        return result(repository.createCourse(course));
+    Course createTask(@RequestBody Course course) {
+        Course newCourse = repository.createCourse(course);
+        if (newCourse == null){
+            throw new ResponseStatusException(HttpStatus.CONFLICT);
+        } return newCourse;
     }
 
     @GetMapping("/courses")
@@ -29,12 +34,17 @@ public class CourseController {
 
     @GetMapping("/courses/{id}")
     Course findCourseById(@PathVariable("id") String id) {
-        return repository.findCourseById(id);
+        Course newCourse =  repository.findCourseById(id);
+        if (newCourse == null){
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+        } return newCourse;
     }
 
     @DeleteMapping("/courses/{id}")
     Map<String, Boolean> deleteCourse(@PathVariable("id") String id) {
-        return result(repository.deleteCourse(id));
+        if (!repository.deleteCourse(id)){
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+        } return result(true);
     }
 
     @PutMapping("/courses/{id}/students")

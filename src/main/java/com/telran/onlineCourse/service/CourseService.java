@@ -5,7 +5,7 @@ import com.telran.onlineCourse.entities.Course;
 import java.util.List;
 
 public interface CourseService {
-    boolean createCourse(Course course);
+    Course createCourse(Course course);
     List<Course> showNonClosedCourse();
     List<Course> showAllCourse();
     Course findCourseById(String id);
