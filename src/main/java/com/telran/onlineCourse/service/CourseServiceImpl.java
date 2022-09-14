@@ -46,40 +46,49 @@ public class CourseServiceImpl implements CourseService {
     }
 
     @Override
-    public boolean deleteCourse(String id) {
-        if (courses.remove(id) == null) return false;
-        return true;
+    public Course deleteCourse(String id) {
+        return courses.remove(id);
     }
 
     @Override
-    public boolean addStudentsToCourse(String id, String[] students) {
+    public Course addStudentsToCourse(String id, String[] students) {
+        Course course = courses.get(id);
+        if (course == null) return null;
+        Set<String> existingStudents = new HashSet<>(course.getStudents());
         for (String student : students) {
-            courses.get(id).getStudents().add(student);
+            if (!existingStudents.contains(student))
+                course.getStudents().add(student);
         }
-        courses.get(id).setUpdatedOn(LocalDateTime.now());
-        return true;
+        course.setUpdatedOn(LocalDateTime.now());
+        return course;
     }
 
     @Override
     public List<String> showStudentsOfCourse(String id) {
-        return courses.get(id).getStudents();
+        Course course = courses.get(id);
+        if (course == null) return null;
+        return course.getStudents();
     }
 
     @Override
-    public boolean deleteStudentFromCourse(String id, String[] students) {
+    public Course deleteStudentFromCourse(String id, String[] students) {
+        Course course = courses.get(id);
+        if (course == null) return null;
         for (String student : students) {
-            courses.get(id).getStudents().remove(student);
+            course.getStudents().remove(student);
         }
-        courses.get(id).setUpdatedOn(LocalDateTime.now());
-        return true;
+        course.setUpdatedOn(LocalDateTime.now());
+        return course;
     }
 
     @Override
-    public boolean changeStatusClosedOfCourse(String id) {
-        if (courses.get(id).isClosed()) {
-            courses.get(id).setClosed(false);
-        } else courses.get(id).setClosed(true);
-        courses.get(id).setUpdatedOn(LocalDateTime.now());
-        return true;
+    public Course changeStatusClosedOfCourse(String id) {
+        Course course = courses.get(id);
+        if (course == null) return null;
+        if (course.isClosed()) {
+            course.setClosed(false);
+        } else course.setClosed(true);
+        course.setUpdatedOn(LocalDateTime.now());
+        return course;
     }
 }

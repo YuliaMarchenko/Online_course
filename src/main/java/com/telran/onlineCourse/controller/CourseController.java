@@ -41,35 +41,42 @@ public class CourseController {
     }
 
     @DeleteMapping("/courses/{id}")
-    Map<String, Boolean> deleteCourse(@PathVariable("id") String id) {
-        if (!repository.deleteCourse(id)){
+    Course deleteCourse(@PathVariable("id") String id) {
+        Course course = repository.deleteCourse(id);
+        if (course == null){
             throw new ResponseStatusException(HttpStatus.NOT_FOUND);
-        } return result(true);
+        } return course;
     }
 
     @PutMapping("/courses/{id}/students")
-    Map<String, Boolean> addStudentsToCourse(@PathVariable("id") String id, @RequestParam("names") String names) {
-        return result(repository.addStudentsToCourse(id, names.split(",")));
+    Course addStudentsToCourse(@PathVariable("id") String id, @RequestParam("names") String names) {
+        Course course = repository.addStudentsToCourse(id, names.split(","));
+        if (course == null){
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+        } return course;
     }
 
     @GetMapping("/courses/{id}/students")
     List<String> showStudentsOfCourse(@PathVariable("id") String id) {
-        return repository.showStudentsOfCourse(id);
+        List<String> students = repository.showStudentsOfCourse(id);
+        if (students == null){
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+        } return students;
     }
 
     @DeleteMapping("/courses/{id}/students")
-    Map<String, Boolean> deleteStudentFromCourse(@PathVariable("id") String id, @RequestParam("names") String names) {
-        return result(repository.deleteStudentFromCourse(id, names.split(",")));
+    Course deleteStudentFromCourse(@PathVariable("id") String id, @RequestParam("names") String names) {
+        Course course = repository.deleteStudentFromCourse(id, names.split(","));
+        if (course == null){
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+        } return course;
     }
 
     @PutMapping("/courses/{id}/toggle-course")
-    Map<String, Boolean> changeStatusClosedOfCourse(@PathVariable("id") String id) {
-        return result(repository.changeStatusClosedOfCourse(id));
-    }
-
-    public Map<String, Boolean> result(boolean answer) {
-        Map<String, Boolean> result = new HashMap<>();
-        result.put("status", answer);
-        return result;
+    Course changeStatusClosedOfCourse(@PathVariable("id") String id) {
+        Course course = repository.changeStatusClosedOfCourse(id);
+        if (course == null){
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+        } return course;
     }
 }
