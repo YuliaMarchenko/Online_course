@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Getter
@@ -16,6 +17,6 @@ public class Course {
     private String name;
     private List<String> students;
     private boolean isClosed;
-    private LocalDate updatedOn;
-    private LocalDate createdOn;
+    private LocalDateTime updatedOn;
+    private LocalDateTime createdOn;
 }

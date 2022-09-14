@@ -2,6 +2,8 @@ package com.telran.onlineCourse.service;
 
 import com.telran.onlineCourse.entities.Course;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.*;
 
 public class CourseServiceImpl implements CourseService {
@@ -10,6 +12,8 @@ public class CourseServiceImpl implements CourseService {
     @Override
     public boolean createCourse(Course course) {
         course.setId(UUID.randomUUID().toString());
+        course.setCreatedOn(LocalDateTime.now());
+        course.setUpdatedOn(LocalDateTime.now());
         courses.put(course.getId(), course);
         return true;
     }
@@ -43,6 +47,7 @@ public class CourseServiceImpl implements CourseService {
         for(String student: students) {
             courses.get(id).getStudents().add(student);
         }
+        courses.get(id).setUpdatedOn(LocalDateTime.now());
         return true;
     }
 
@@ -56,6 +61,7 @@ public class CourseServiceImpl implements CourseService {
         for(String student: students) {
             courses.get(id).getStudents().remove(student);
         }
+        courses.get(id).setUpdatedOn(LocalDateTime.now());
         return true;
     }
 
@@ -64,6 +70,7 @@ public class CourseServiceImpl implements CourseService {
         if (courses.get(id).isClosed()) {
             courses.get(id).setClosed(false);
         } else courses.get(id).setClosed(true);
+        courses.get(id).setUpdatedOn(LocalDateTime.now());
         return true;
     }
 }
