@@ -1,13 +1,8 @@
 package com.telran.onlineCourse.service;
 
 import com.telran.onlineCourse.entities.Course;
-import org.springframework.beans.factory.annotation.Value;
 
-
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 public class CourseServiceImpl implements CourseService {
     private Map<String, Course> courses = new HashMap<>();
@@ -21,21 +16,24 @@ public class CourseServiceImpl implements CourseService {
 
     @Override
     public List<Course> showNonClosedCourse() {
-        return null;
+        return courses.values().stream()
+                .filter(course -> course.isClosed())
+                .toList();
     }
 
     @Override
     public List<Course> showAllCourse() {
-        return null;
+        return courses.values().stream().toList();
     }
 
     @Override
-    public Course findCourseById() {
-        return null;
+    public Course findCourseById(String id) {
+        return courses.get(id);
+
     }
 
     @Override
-    public boolean deleteCourse(int id) {
+    public boolean deleteCourse(String id) {
         return false;
     }
 
@@ -50,12 +48,12 @@ public class CourseServiceImpl implements CourseService {
     }
 
     @Override
-    public boolean deleteStudentFromCourse(String name, int id) {
+    public boolean deleteStudentFromCourse(String name, String id) {
         return false;
     }
 
     @Override
-    public boolean changeStatusClosedOfCourse(int id) {
+    public boolean changeStatusClosedOfCourse(String id) {
         return false;
     }
 }

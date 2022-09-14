@@ -2,11 +2,10 @@ package com.telran.onlineCourse.controller;
 
 import com.telran.onlineCourse.entities.Course;
 import com.telran.onlineCourse.service.CourseService;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -20,6 +19,17 @@ public class CourseController {
     @PostMapping("/courses")
     Map<String, Boolean> createTask(@RequestBody Course course) {
         return result(repository.createCourse(course));
+    }
+
+    @GetMapping("/courses")
+    List<Course> showCourses(@RequestParam("show-closed") boolean showClosed){
+        if (showClosed) return repository.showAllCourse();
+        else return repository.showNonClosedCourse();
+    }
+
+    @GetMapping("/courses/{id}")
+    Course findCourseById(@PathVariable("id") String id){
+        return repository.findCourseById(id);
     }
 
     public Map<String, Boolean> result(boolean answer){
