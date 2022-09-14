@@ -22,27 +22,42 @@ public class CourseController {
     }
 
     @GetMapping("/courses")
-    List<Course> showCourses(@RequestParam("show-closed") boolean showClosed){
+    List<Course> showCourses(@RequestParam("show-closed") boolean showClosed) {
         if (showClosed) return repository.showAllCourse();
         else return repository.showNonClosedCourse();
     }
 
     @GetMapping("/courses/{id}")
-    Course findCourseById(@PathVariable("id") String id){
+    Course findCourseById(@PathVariable("id") String id) {
         return repository.findCourseById(id);
     }
 
     @DeleteMapping("/courses/{id}")
-    Map<String,Boolean> deleteCourse(@PathVariable("id") String id){
+    Map<String, Boolean> deleteCourse(@PathVariable("id") String id) {
         return result(repository.deleteCourse(id));
     }
 
     @PutMapping("/courses/{id}/students")
-    Map<String, Boolean> addStudentsToCourse(@PathVariable("id") String id, @RequestParam("names") String names){
+    Map<String, Boolean> addStudentsToCourse(@PathVariable("id") String id, @RequestParam("names") String names) {
         return result(repository.addStudentsToCourse(id, names.split(",")));
     }
 
-    public Map<String, Boolean> result(boolean answer){
+    @GetMapping("/courses/{id}/students")
+    List<String> showStudentsOfCourse(@PathVariable("id") String id) {
+        return repository.showStudentsOfCourse(id);
+    }
+
+    @DeleteMapping("/courses/{id}/students")
+    Map<String, Boolean> deleteStudentFromCourse(@PathVariable("id") String id, @RequestParam("names") String names) {
+        return result(repository.deleteStudentFromCourse(id, names.split(",")));
+    }
+
+    @PutMapping("/courses/{id}/toggle-course")
+    Map<String, Boolean> changeStatusClosedOfCourse(@PathVariable("id") String id) {
+        return result(repository.changeStatusClosedOfCourse(id));
+    }
+
+    public Map<String, Boolean> result(boolean answer) {
         Map<String, Boolean> result = new HashMap<>();
         result.put("status", answer);
         return result;

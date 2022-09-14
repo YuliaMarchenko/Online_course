@@ -47,17 +47,23 @@ public class CourseServiceImpl implements CourseService {
     }
 
     @Override
-    public List<String> showStudentsOfCourse() {
-        return null;
+    public List<String> showStudentsOfCourse(String id) {
+        return courses.get(id).getStudents();
     }
 
     @Override
-    public boolean deleteStudentFromCourse(String name, String id) {
-        return false;
+    public boolean deleteStudentFromCourse(String id, String [] students) {
+        for(String student: students) {
+            courses.get(id).getStudents().remove(student);
+        }
+        return true;
     }
 
     @Override
     public boolean changeStatusClosedOfCourse(String id) {
-        return false;
+        if (courses.get(id).isClosed()) {
+            courses.get(id).setClosed(false);
+        } else courses.get(id).setClosed(true);
+        return true;
     }
 }
